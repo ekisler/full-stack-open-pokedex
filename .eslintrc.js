@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+// eslint-disable-next-line no-undef
 module.exports = {
   env: {
     browser: true,
