@@ -1,12 +1,17 @@
+// eslint-disable-next-line no-undef
 const HtmlWebPackPlugin = require("html-webpack-plugin");
-const path = require('path');
 
+// eslint-disable-next-line no-undef
+const path = require("path");
+
+// eslint-disable-next-line no-undef
 module.exports = {
   entry: "./src/index.jsx",
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/'
+    // eslint-disable-next-line no-undef
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
+    publicPath: "/",
   },
   module: {
     rules: [
@@ -35,7 +40,7 @@ module.exports = {
             loader: "css-loader",
           },
         ],
-      }
+      },
     ],
   },
   resolve: {
