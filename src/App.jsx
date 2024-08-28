@@ -14,8 +14,6 @@ const mapResults = ({ results }) =>
   }));
 
 const App = () => {
-  let next = null;
-  let previous = null;
   const match = useMatch("/pokemon/:name");
   const {
     data: pokemonList,
@@ -29,6 +27,9 @@ const App = () => {
   if (error) {
     return <ErrorMessage error={error} />;
   }
+
+  let next = null;
+  let previous = null;
 
   if (match && match.params) {
     const pokemonId = pokemonList.find(
