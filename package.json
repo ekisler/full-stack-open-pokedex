@@ -2,7 +2,7 @@
   "name": "fullstackopen-cicd",
   "version": "1.0.0",
   "description": "Full Stack Open",
-  "main": "src/index.js",
+  "main": "src/index.jsx",
   "scripts": {
     "start": "webpack-dev-server --open --mode development",
     "start-prod": "node app.js",
