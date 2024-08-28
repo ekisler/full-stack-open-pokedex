@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Routes, Route, useMatch } from "react-router-dom";
+import { Routes, Route, useMatch } from "react-router-dom";
 import { useApi } from "./useApi";
 import LoadingSpinner from "./LoadingSpinner";
 import ErrorMessage from "./ErrorMessage";
@@ -14,6 +14,8 @@ const mapResults = ({ results }) =>
   }));
 
 const App = () => {
+  let next = null;
+  let previous = null;
   const match = useMatch("/pokemon/:name");
   const {
     data: pokemonList,
@@ -27,9 +29,6 @@ const App = () => {
   if (error) {
     return <ErrorMessage error={error} />;
   }
-
-  let next = null;
-  let previous = null;
 
   if (match && match.params) {
     const pokemonId = pokemonList.find(
