@@ -1,9 +1,12 @@
 # .github/workflows/ci.yml
 
 on:
-  pull_request:
   push:
+    branches: 
+      - main
+  pull_request:
     branches: [main]
+    types: [opened, synchronize]
 
 jobs:
   ci:
@@ -51,7 +54,7 @@ jobs:
 
       - name: Deploy
         # Only run this step if the branch is main
-        if: github.ref == 'refs/heads/main'
+        if: ${{ github.event_name == 'push' }}
         env:
           deploy_url: ${{ secrets.RENDER_API_KEY }}
         run: |
