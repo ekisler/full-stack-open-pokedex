@@ -14,7 +14,9 @@ jobs:
   simple_deployment_pipeline:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Install system dependencies
         run: |
@@ -58,6 +60,19 @@ jobs:
     needs: simple_deployment_pipeline
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Asegúrate de obtener todas las referencias
+
+      - name: Bump version and push tag
+        # Solo ejecutar este paso si hay un push a la rama main
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true  # Ajusta según tus necesidades
+
       - name: Deploy
         # Only run this step if the branch is main
         if: ${{ github.event_name == 'push' }}
@@ -66,9 +81,4 @@ jobs:
         run: |
           curl "$deploy_url"
 
-      - name: Bump version and push tag
-        # Solo ejecutar este paso si hay un push a la rama main
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        uses: anothrNick/github-tag-action@1.64.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
