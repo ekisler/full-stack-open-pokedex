@@ -1,0 +1,58 @@
+# .github/workflows/ci.yml
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 \
+            libxss1 \
+            libasound2 \
+            libatk-bridge2.0-0 \
+            libatk1.0-0 \
+            libcups2 \
+            libdbus-glib-1-2 \
+            libgdk-pixbuf2.0-0 \
+            libgtk-3-0 \
+            libpango1.0-0 \
+            libx11-xcb1 \
+            libxcomposite1 \
+            libxrandr2 \
+            libxdamage1 \
+            libxext6 \
+            libxi6 \
+            libxtst6 \
+            libxss1 \
+            libgbm1 \
+            libopus0 \
+            libvpx7 \
+            libglib2.0-0 \
+            libgstreamer1.0-0 \
+            libgstreamer-plugins-base1.0-0
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Test
+        run: npm run test
+
+      - name: Deploy
+        # Only run this step if the branch is main
+        if: github.ref == 'refs/heads/main'
+        env:
+          deploy_url: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          curl "$deploy_url"
