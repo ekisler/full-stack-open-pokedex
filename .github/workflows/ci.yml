@@ -2,18 +2,18 @@
 
 on:
   push:
-    branches: 
+    branches:
       - main
   pull_request:
     branches: [main]
     types: [opened, synchronize]
 
 jobs:
-  ci:
+  simple_deployment_pipeline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
@@ -52,6 +52,10 @@ jobs:
       - name: Test
         run: npm run test
 
+  tag_release:
+    needs: simple_deployment_pipeline
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy
         # Only run this step if the branch is main
         if: ${{ github.event_name == 'push' }}
