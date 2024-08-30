@@ -35,7 +35,7 @@ jobs:
             libxss1 \
             libgbm1 \
             libopus0 \
-            libvpx6 \
+            libvpx7 \
             libglib2.0-0 \
             libgstreamer1.0-0 \
             libgstreamer-plugins-base1.0-0
@@ -44,7 +44,7 @@ jobs:
         run: npm install
 
       - name: Install Playwright Browsers
-        run: npx playwright install
+        run: npx playwright install --with-deps
 
       - name: Test
         run: npm run test
