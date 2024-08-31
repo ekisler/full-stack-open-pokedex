@@ -63,15 +63,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Asegúrate de obtener todas las referencias
+          fetch-depth: 0 # Asegúrate de obtener todas las referencias
 
       - name: Bump version and push tag
         # Solo ejecutar este paso si hay un push a la rama main
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.event_name == 'push' && github.ref == !contains(github.event.head_commit.message, '#skip') }}
         uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true  # Ajusta según tus necesidades
+          WITH_V: true # Ajusta según tus necesidades
 
       - name: Deploy
         # Only run this step if the branch is main
@@ -80,5 +80,3 @@ jobs:
           deploy_url: ${{ secrets.RENDER_API_KEY }}
         run: |
           curl "$deploy_url"
-
-      
