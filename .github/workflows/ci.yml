@@ -57,28 +57,28 @@ jobs:
         run: npm run test
 
       - name: Notify Discord on Success
-        if: success()
         uses: rjstone/discord-webhook-notify@v1
+        if: success()
         with:
           severity: info
-          details: '✅ La nueva versión se ha implementado exitosamente!'
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          details: "✅ La nueva versión se ha implementado exitosamente!"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       - name: Notify Discord on Failure
         if: failure()
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: error
-          details: '❌ La compilación ha fallado. Por favor, revisa los errores.'
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          details: "❌ La compilación ha fallado. Por favor, revisa los errores."
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       - name: Notify Discord on Cancelled
         if: cancelled()
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: warn
-          details: '⚠️ La compilación ha sido cancelada.'
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}    
+          details: "⚠️ La compilación ha sido cancelada."
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
   tag_release:
     needs: simple_deployment_pipeline
@@ -87,7 +87,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
 
         # Agregar #major, #minor o #patch en el commit
       - name: Bump version and push tag
@@ -95,7 +95,7 @@ jobs:
         uses: anothrNick/github-tag-action@777684df761b882a3f4f70db16ac70d8cc78d0ea
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true 
+          WITH_V: true
 
       - name: Deploy
         if: ${{ github.event_name == 'push' }}
