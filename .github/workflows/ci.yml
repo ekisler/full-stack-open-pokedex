@@ -56,6 +56,30 @@ jobs:
       - name: Test
         run: npm run test
 
+      - name: Notify Discord on Success
+        if: success()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          details: '✅ La nueva versión se ha implementado exitosamente!'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Notify Discord on Failure
+        if: failure()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: error
+          details: '❌ La compilación ha fallado. Por favor, revisa los errores.'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Notify Discord on Cancelled
+        if: cancelled()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: warn
+          details: '⚠️ La compilación ha sido cancelada.'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}    
+
   tag_release:
     needs: simple_deployment_pipeline
     runs-on: ubuntu-latest
