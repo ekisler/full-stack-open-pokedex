@@ -60,7 +60,7 @@ jobs:
         if: success()
         with:
           severity: info
-          details: "✅ La nueva versión se ha implementado exitosamente!"
+          details: Test Succeeded!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       - name: Notify Discord on Failure
@@ -68,7 +68,7 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: error
-          details: "❌ La compilación ha fallado. Por favor, revisa los errores."
+          details: Test Failed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       - name: Notify Discord on Cancelled
@@ -76,7 +76,7 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: warn
-          details: "⚠️ La compilación ha sido cancelada."
+          details: Test Cancelled!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
   tag_release:
