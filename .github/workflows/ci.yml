@@ -56,28 +56,11 @@ jobs:
         run: npm run test
 
       - name: Notify Discord on Success
-        uses: rjstone/discord-webhook-notify@v1
-        if: success()
+        env:  
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        uses: Ilshidur/action-discord@master
         with:
-          severity: info
-          details: Test Succeeded!
-          webhookUrl: https://webhook.site/a785a940-cc01-43b1-9974-454db769f169
-
-      - name: Notify Discord on Failure
-        if: failure()
-        uses: rjstone/discord-webhook-notify@v1
-        with:
-          severity: error
-          details: Test Failed!
-          webhookUrl: https://webhook.site/a785a940-cc01-43b1-9974-454db769f169
-
-      - name: Notify Discord on Cancelled
-        if: cancelled()
-        uses: rjstone/discord-webhook-notify@v1
-        with:
-          severity: warn
-          details: Test Cancelled!
-          webhookUrl: https://webhook.site/a785a940-cc01-43b1-9974-454db769f169
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
 
   tag_release:
     needs: simple_deployment_pipeline
