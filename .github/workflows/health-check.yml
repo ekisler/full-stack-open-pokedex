@@ -2,8 +2,8 @@ name: Health Check
 
 on:
   schedule:
-    - cron: "0 0 * * *" # Ejecutar una vez al día a medianoche UTC
-  workflow_dispatch: # Permite ejecutar manualmente el flujo de trabajo
+    - cron: "0 0 * * *" 
+  workflow_dispatch: 
 
 jobs:
   health_check:
@@ -13,12 +13,12 @@ jobs:
         uses: jtalk/url-health-check-action@v4
         with:
           url: https://full-stack-open-pokedex-igs4.onrender.com/
-          follow-redirect: false # Optional, defaults to "false"
-          max-attempts: 3 # Optional, defaults to 1
-          retry-delay: 5s # Optional, only applicable to max-attempts > 1
-          retry-all: false # Optional, defaults to "false"
-          cookie: "" # Optional, default is empty
-          basic-auth: "" # Optional, default is empty
+          follow-redirect: false 
+          max-attempts: 3 
+          retry-delay: 5s 
+          retry-all: false 
+          cookie: ""
+          basic-auth: "" 
 
 
       - name: Discord health notification
@@ -26,5 +26,13 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
         with:
-          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} is healthy!'
+          args: |
+            {
+              "embeds": [
+                {
+                  "title": 'The project {{ EVENT_PAYLOAD.repository.full_name }} is healthy!',
+                  "color": 16761056
+                }
+              ]
+            }
 
