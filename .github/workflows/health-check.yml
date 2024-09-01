@@ -20,13 +20,11 @@ jobs:
           cookie: "" # Optional, default is empty
           basic-auth: "" # Optional, default is empty
 
-      - name: Send Discord notification
-        env:
+
+      - name: Discord health notification
+        env:  
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        run: |
-          echo "Health check status: $? >> debug.log
-          if [ $? -eq 0 ]; then
-            echo "The health check for the project {{ EVENT_PAYLOAD.repository.full_name }} was successful!" | Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9 --webhook-url $DISCORD_WEBHOOK
-          else
-            echo "The health check for the project {{ EVENT_PAYLOAD.repository.full_name }} has failed!" | Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9 --webhook-url $DISCORD_WEBHOOK
-          fi
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        with:
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} is healthy!'
+
