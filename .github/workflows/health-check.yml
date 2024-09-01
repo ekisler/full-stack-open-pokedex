@@ -2,8 +2,8 @@ name: Health Check
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Ejecutar una vez al día a medianoche UTC
-  workflow_dispatch:  # Permite ejecutar manualmente el flujo de trabajo
+    - cron: '0 0 * * *' 
+  workflow_dispatch:  
 
 jobs:
   health_check:
@@ -12,19 +12,26 @@ jobs:
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v4
         with:
-          # Check the following URLs one by one sequentially
           url: https://full-stack-open-pokedex-igs4.onrender.com/
-          # Follow redirects, or just report success on 3xx status codes
-          follow-redirect: false # Optional, defaults to "false"
-          # Fail this action after this many failed attempts
-          max-attempts: 3 # Optional, defaults to 1
-          # Delay between retries
-          retry-delay: 5s # Optional, only applicable to max-attempts > 1
-          # Retry all errors, including 404. This option might trigger curl upgrade.
-          retry-all: false # Optional, defaults to "false"
-          # String representation of cookie attached to health check request.
-          # Format: `Name=Value`
-          cookie: "" # Optional, default is empty
-          # Basic auth login password pair.
-          # Format: `login:password`
-          basic-auth: "" # Optional, default is empty
+          follow-redirect: false 
+          max-attempts: 3 
+          retry-delay: 5s 
+          retry-all: false 
+          cookie: "" 
+          basic-auth: "" 
+
+      - name: Discord notification on success
+        if: ${{ steps.health_check.outcome == 'success' }}
+        env:  
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        with:
+          args: 'The health check for the project {{ EVENT_PAYLOAD.repository.full_name }} was successful!'
+  
+      - name: Discord notification on failure
+        if: ${{ steps.health_check.outcome == 'failure' }}
+        env:  
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        with:
+          args: 'The health check for the project {{ EVENT_PAYLOAD.repository.full_name }} has failed!'
