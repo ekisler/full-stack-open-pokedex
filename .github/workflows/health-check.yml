@@ -12,6 +12,7 @@ jobs:
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v4
         with:
+          # I changed the url by mistake and deleted it from render
           url: https://full-stack-open-pokedex-txnk.onrender.com
           follow-redirect: false 
           max-attempts: 3 
